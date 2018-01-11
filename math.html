@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+<body>
+	<p>2块钱一瓶</p>
+	<p>4个瓶盖可以换一瓶</p>
+	<p>2个空瓶可以换一瓶</p>
+	<p>假设有<input type="text">钱，可以喝？<button>result</button><p>
+
+	<ul></ul>
+
+</body>
+</html>
+<script>
+
+	{
+
+		var getMoney = (money) => {
+			var [drink,emptybottle,cap,printStr] = [money/2,money/2,money/2,''];
+
+			var Calculate = () => {
+
+				while(emptybottle >= 2 || cap >= 4){
+					var [bottleNum,capNum] = [0,0];
+
+					bottleNum = parseInt(emptybottle / 2);
+					capNum = parseInt(cap / 4);
+
+					emptybottle = (emptybottle - bottleNum*2) + bottleNum + capNum;
+					cap = (cap - capNum*4) + capNum + bottleNum;
+					drink = drink + bottleNum + capNum;
+ 
+					printStr+="<li>喝了"+Math.floor(drink)+"瓶  /  "+
+					"剩余空瓶:"+Math.floor(emptybottle)+"  /  "+
+					"剩余瓶盖:"+Math.floor(cap)+"</li>";
+
+				}
+				document.getElementsByTagName('ul')[0].innerHTML = printStr;
+			}
+			Calculate();
+		}
+		document.getElementsByTagName('button')[0].onclick = function() {
+			getMoney(document.getElementsByTagName('input')[0].value);
+		}
+
+	}
+</script>
