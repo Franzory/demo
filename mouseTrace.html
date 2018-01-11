@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head> 
+    <meta charset="utf-8" /> 
+    <title>Document</title> 
+    <style>
+    *{padding: 0;margin: 0}
+    body,html{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    canvas{
+        position: absolute;
+    }
+    canvas:nth-child(2){
+     z-index: -1;
+    }
+    </style> 
+</head> 
+<body> 
+    <canvas></canvas>  
+    <canvas></canvas>  
+</body>
+</html>
+<script>
+(function(){
+
+    var canvas=document.getElementsByTagName('canvas')[0];
+    var canvas2=document.getElementsByTagName('canvas')[1];
+        for(let i in document.getElementsByTagName('canvas')){
+        document.getElementsByTagName('canvas')[i].width = document.documentElement.clientWidth;
+        document.getElementsByTagName('canvas')[i].height = document.documentElement.clientHeight;
+        }
+
+    var ctx = canvas.getContext('2d');
+    var bullet = canvas2.getContext('2d');
+    var img = new Image()  
+    img.src = "img/arrow.png";  
+    var speedX= 0;
+    var speedY = 0;
+    var bulletX =canvas.width/2+10;
+    var bulletY =canvas.height/2-35;
+
+    var Arrow = {
+        draw:function(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.save();
+            ctx.translate(Arrow.ctxX,Arrow.ctxY);
+            ctx.rotate(Arrow.rolation)
+            ctx.drawImage(img,-40,-40,80,80);  
+            ctx.restore();
+        },
+        ctxX:canvas.width/2,
+        ctxY:canvas.height/2.2,
+        mouseMoveAction:function(){
+            Arrow.rolation = Math.atan2(event.pageY-Arrow.ctxY,event.pageX-Arrow.ctxX);//返回从 x 轴到点 (x,y) 之间的角度
+            Arrow.draw();
+            var e = event || window.event;
+            speedX = (e.pageX-bulletX)/60;
+            speedY = (e.pageY-bulletY)/60;
+        },
+        mouseDownAction:function(){
+            img.src = "img/arrow2.png";  
+        },
+        mouseUpAction:function(){
+            img.src = "img/arrow.png";  
+            setInterval(function(){
+                bullet.clearRect(0,0,canvas.width,canvas.height);
+                bulletX+=speedX;
+                bulletY+=speedY;  
+                bullet.fillRect(bulletX,bulletY,20,20);
+            },10)
+        }
+    };
+    img.onload = function(){
+        Arrow.draw();
+        canvas.addEventListener('mousemove',Arrow.mouseMoveAction,false);
+        canvas.addEventListener('mousedown',Arrow.mouseDownAction,false);
+        canvas.addEventListener('mouseup',Arrow.mouseUpAction,false);
+    }
+})()     
+        
+
+//http://www.w3school.com.cn/jsref/jsref_atan2.asp
+</script> 
