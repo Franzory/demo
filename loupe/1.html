@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<style type="text/css">
+*{
+	margin:0px;
+	padding: 0px;
+}
+#box{
+	width: 838px;
+	height: 430px;
+	border: 3px solid #000;
+	box-sizing:border-box;box-sizing:border-box;
+	margin: 100px auto;
+}
+#div1 { width:304px; height:222px; position:relative;float: left; border: 1px solid #000;cursor: none;margin-top: 90px; margin-left: 10px;} 
+#div1 img{width:304px; height:222px;z-index: 1}
+#md{
+	width:304px; height:222px;
+	position: absolute;
+}
+#div1 span { width:100px; height:100px; background:rgba(255,255,255,0.2); left:0px;top:0px; position:absolute; z-index: 2;border: 1px solid #000;} 
+#div2 {width:504px; height:422px; position:relative;overflow:hidden; float: left; margin-left: 10px; border: 1px solid #000;} 
+#img1 { position:absolute;} 
+</style> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title></title> 
+
+</head> 
+<body> 
+<div id="box">
+<div id="div1">
+<div id="md"></div>
+	<img src="7.jpg" /> 
+<span></span> 
+</div> 
+
+<div id="div2"> 
+	<img id="img1" src="7.jpg" /> 
+</div> 
+</div>
+</body> 
+</html>
+<script type="text/javascript"> 
+window.onload=function () 
+{ 
+var oDiv=document.getElementById('div1'); 
+var oSpan=oDiv.getElementsByTagName('span')[0]; 
+var oImg=document.getElementById('img1'); 
+
+oDiv.onmousedown=function(event) 
+{ 
+	md.style.zIndex = 3;
+	oDiv.style.cursor = 'move';
+	md.onmouseout=function() 
+	{ 
+		md.style.zIndex = -1; 
+		oSpan.style.display='none';
+		oDiv.style.cursor = 'none';
+	}; 
+	md.onmousemove=function() 
+{
+oSpan.style.display='block'; 
+var event=event || window.event; 
+var body = document.body || document.documentElement || document.getElementsByTagName('body')[0];
+var x=(event.clientX+body.scrollLeft)-oDiv.offsetLeft-(oSpan.offsetWidth/2);
+var y=(event.clientY+body.scrollTop)-oDiv.offsetTop-(oSpan.offsetWidth/2);
+var maxX = oDiv.offsetWidth-oSpan.offsetWidth;
+var maxY = oDiv.offsetHeight-oSpan.offsetHeight;
+console.log(div2.offsetLeft);
+if(x<0){ 
+	x=0; 
+}else if(x>maxX){ 
+		x=maxX; 
+};
+if(y<0){ 
+	y=0; 
+}else if(y>maxY){ 
+		y=maxY 
+	};
+oSpan.style.left=x+'px'; 
+oSpan.style.top=y+'px'; 
+
+var percentX=x/(oDiv.offsetWidth-oSpan.offsetWidth); 
+var percentY=y/(oDiv.offsetHeight-oSpan.offsetHeight); 
+var oImgparent=document.getElementById('div2'); 
+oImg.style.left=-percentX*(oImg.offsetWidth-oImgparent.offsetWidth)+'px'; 
+oImg.style.top=-percentY*(oImg.offsetHeight-oImgparent.offsetHeight)+'px'; 
+};
+}; 
+div1.onmouseup=function() 
+	{md.style.zIndex = -1; 
+	oDiv.style.cursor = 'none';}
+}; 
+</script> 
+ 
