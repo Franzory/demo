@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{
+		margin: 0px;
+		padding: 0px;
+	}
+	body,html{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+	#box{
+		width:100%;
+		height: 100%;
+		background: #ccc;
+	}
+	p{
+		position:absolute;left:0px;top:0px;width:100px;height:100px;border:3px solid #000;
+		font-size: 50px;
+		box-sizing:border-box;
+		box-shadow: 1px 1px 15px 5px #333;
+		background: rgba(255,255,255,0.3);
+
+	}
+	.setBox{
+		position: fixed;
+		bottom: 10px;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		-o-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+
+</body>
+</html>
+<script type="text/javascript">
+window.onload = function(){
+	(function(){
+
+
+	var ballNum =5;
+	var box  = document.getElementById('box');
+	
+	for(var i=0;i<ballNum;i++){
+		var newBall = document.createElement("p");
+		newBall.class = 'ball';
+		box.appendChild(newBall);
+	}
+var ball  = box.getElementsByTagName('p');
+	var dirArr = [];
+	var ballPosition = [];
+	var randomDir = [1,-1];
+	var centerY =ball[0].offsetWidth+20;
+	var centerX = 100;
+	
+	for(var i=0;i<ballNum;i++){
+		dirArr.push(randomDir[Math.round(Math.random()*1)]);
+		dirArr.push(randomDir[Math.round(Math.random()*1)]);
+		ballPosition.push(centerX);
+		ballPosition.push(centerY*i);
+	}
+var ballArr = [];
+var oneBall;
+var twoBall;
+    function ballMove(m,index,dir){
+
+    	var timer = setInterval(function(){
+
+
+    		ballPosition[dir]+=m*dirArr[dir];
+	        ballPosition[dir+1]+=m*dirArr[dir+1];
+
+		        ball[index].style.cssText+="transform:translateY("+ballPosition[dir]+'px) translateX('+(ballPosition[dir+1])+100+'px)';
+		        oneBall = ball[index].getBoundingClientRect();
+		        twoBall = document.getElementsByTagName('p');
+		        
+		        //console.log(twoBall);
+
+			for(var i=0;i<ballNum;i++){
+				if(index != i){
+					if(oneBall.right >=twoBall[i].getBoundingClientRect().left && oneBall.left <=twoBall[i].getBoundingClientRect().right && oneBall.bottom >= twoBall[i].getBoundingClientRect().top && oneBall.top <= twoBall[i].getBoundingClientRect().bottom){
+
+							if(Math.abs(oneBall.top - twoBall[i].getBoundingClientRect().top)>Math.abs(oneBall.left - twoBall[i].getBoundingClientRect().left)){
+								dirArr[dir]=-dirArr[dir];
+							}else{
+								dirArr[dir+1]=-dirArr[dir+1];
+							}
+						
+						/*if(oneBall.bottom >= twoBall[i].getBoundingClientRect().top || oneBall.top <= twoBall[i].getBoundingClientRect().bottom){
+							
+						}*/
+						bor(index)
+	    			}
+				} 			
+    			
+    		}
+
+		        	if(ballPosition[dir+1]+ball[index].offsetWidth>=box.offsetWidth ||ballPosition[dir+1]<=0){
+			            dirArr[dir+1]=-dirArr[dir+1];
+			            bor(index)
+
+			        }
+			        if(ballPosition[dir]+ball[index].offsetHeight>=box.offsetHeight || ballPosition[dir]<=0 ){
+			            dirArr[dir]=-dirArr[dir];
+			            bor(index)
+
+			        }
+    	},10)
+    }
+
+    function bor(n){
+    	ball[n].style.cssText += 'border:3px solid red';
+            setTimeout(function(){
+            	ball[n].style.cssText += 'border:3px solid #000';
+            },200)
+    }
+
+	for(var i = 0;i<ballNum;i++){
+		ballMove(Math.random()*1,i,i*2);
+	}
+})()
+}
+</script>
