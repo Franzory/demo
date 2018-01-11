@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<link rel="stylesheet" href="css/jquery-ui.css" />
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+<style type="text/css">
+	*{
+		margin: 0px;
+		padding: 0px;
+	}
+</style>
+</head>
+<body>
+	<img src="img/3.jpg" alt="" id="imger" usemap="#planetmap" width="20%">
+</body>
+</html>
+<script type="text/javascript">
+var imger = document.getElementById('imger');
+	$('#imger').draggable({
+        drag:function(){
+            if($('#imger').offset().left>=0){
+                console.log(1);
+
+                $('#imger').css('left','0px');
+
+                $('#imger').offset({left:0});
+
+                $('#imger').offsetLeft = 0;
+                
+                imger.style.left = '0px';
+
+                imger.style.cssText += 'left:0px';
+            }
+        },
+	})
+</script>
