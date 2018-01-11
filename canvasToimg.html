@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>canvasToimg</title>
+</head>
+<style>
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{ }
+#dom{ width: 200px; height: 200px; border:1px solid black; overflow: hidden; position: relative; }
+#dom div{ position: absolute; }
+img{width:100%; height: 100%}
+a{
+	cursor: pointer;
+}
+canvas{width:200px; height: 200px; border:1px solid black; }
+</style>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<body>
+
+<form id="form1" runat="server">
+	<input type='file' id="imgInp" />
+</form>
+
+<h3>dom:</h3>
+<div id="dom">
+	<div class='item' data-x="0" data-y="0" data-angle="0" data-w="200" data-h="200" ><img id="blah" src="" alt="选择图片" /></div>	
+</div>
+
+<h3>canvas:</h3>
+<canvas id="myCanvas" width="200" height="200"></canvas>
+<!-- 这里width和height要和CSS一致，为什么？请看：
+http://www.cnblogs.com/macliu/p/5583626.html -->
+
+<div id="footer">
+<a id='savePicture'>下载图片</a>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+
+function readURL(input) {
+   if (input.files && input.files[0]) {
+       var reader = new FileReader();
+       reader.onload = function (e) {
+           $('#blah').attr('src', e.target.result);
+       }
+       reader.readAsDataURL(input.files[0]);
+   }
+}
+$("#imgInp").change(function(){
+   readURL(this);
+});
+//DOM内容处理，根据data-* 来设置属性
+$('.item').each(function(i,v){
+	var x     = $(v).attr('data-x');
+	var y     = $(v).attr('data-y');
+	var angle = $(v).attr('data-angle');
+	var w     = $(v).attr('data-w');
+	var h     = $(v).attr('data-h');
+
+	$(v).css({   // DOM对象转JQ对象
+		'left':x+'px',
+		'top':y+'px',
+		'width':w,
+		'height':h,
+		'transform':'rotate('+angle+'deg)'
+	})
+})
+
+
+//将DOM的内容写进Canvas
+var myCanvas = document.getElementById('myCanvas');
+var ctx = myCanvas.getContext('2d');
+$('.item').each(function(i,v){
+
+
+	var x     = $(v).attr('data-x');
+	var y     = $(v).attr('data-y');
+	var angle = $(v).attr('data-angle');
+		radio = angle*Math.PI/180;
+
+	var w     = $(v).attr('data-w');
+	var h     = $(v).attr('data-h');
+
+	var img = $(this).children('img')[0]; //Jquery 对象转 DOM 对象
+
+	(function(x,y,radio,w,h){
+	img.onload = function(){
+		ctx.clearRect(0,0,myCanvas.width,myCanvas.height); 
+			ctx.save();				
+				ctx.translate(x*1+w/2,y*1+h/2)	//这里应该是最难的
+				ctx.rotate(radio);		
+				ctx.drawImage(img,-w/2,-h/2,w,h);
+
+				ctx.fillStyle='#fff';
+				ctx.font = "bold 16px '字体','字体','微软雅黑','宋体'";
+				ctx.fillText('@方泽锋',50,90,50);	
+
+			ctx.restore(); //restore 会恢复 translate和rotate的设置，但不会影响img
+	}
+	})(x,y,radio,w,h);
+
+
+
+})
+
+var savePicture=document.getElementById("savePicture"); 
+savePicture.onclick=function () {
+     savePicture.href= myCanvas.toDataURL('image/png'); //可能要使用xampp来运行
+     savePicture.download=""; //这句是需要的 
+}
+
+</script>
